@@ -4,10 +4,11 @@ import { Heading, Skeleton, Form, Checkbox, Paragraph, Flex, FormControl, TextIn
 import { css } from 'emotion';
 import { /* useCMA, */ useSDK } from '@contentful/react-apps-toolkit';
 import { useWistia } from '../hooks/useWistia';
+import { WistiaItem } from '../types';
 
 export interface AppInstallationParameters {
   apiBearerToken: string;
-  excludedProjects: number[];
+  excludedProjects: WistiaItem[];
 }
 
 
@@ -20,13 +21,13 @@ const ConfigScreen = () => {
   });
   const sdk = useSDK<ConfigAppSDK>();
   const [projects, loading] = useWistia(parameters.apiBearerToken);
-  const [excludedProjects, setExcludedProjects] = useState<number[]>([]);
+  const [excludedProjects, setExcludedProjects] = useState<string[]>([]);
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
       setParameters({
         ...parameters,
-        excludedProjects
+        excludedProjects: projects.filter(project => excludedProjects.includes(project.hashedId)),
       })
     }, 100);
     return () => clearTimeout(timeOutId);
@@ -59,7 +60,7 @@ const ConfigScreen = () => {
       const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
       if (currentParameters && currentParameters.apiBearerToken && currentParameters.excludedProjects.length > 0) {
         setParameters(currentParameters);
-        setExcludedProjects(currentParameters.excludedProjects);
+        setExcludedProjects(currentParameters.excludedProjects.map((item) => item.hashedId));
       } else {
         setParameters({
           apiBearerToken: '',
@@ -116,13 +117,11 @@ const ConfigScreen = () => {
                 name={`projects-controlled-${index}`}
                 id={`projects-controlled-${index}`}
                 key={index}
-                value={projects.id.toString()}
-                isChecked={excludedProjects.includes(projects.id)}
+                value={projects.hashedId}
+                isChecked={excludedProjects.includes(projects.hashedId)}
                 onChange={(e) => {
-                  !e.target.checked ? setExcludedProjects(excludedProjects.filter(project => project !== projects.id)) :
-                    setExcludedProjects(excludedProjects.concat(projects.id));
-
-
+                  !e.target.checked ? setExcludedProjects(excludedProjects.filter(project => project !== projects.hashedId)) :
+                    setExcludedProjects(excludedProjects.concat(projects.hashedId));
                 }}
               >
                 {projects.name}

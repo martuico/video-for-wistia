@@ -38,7 +38,7 @@ export const fetchVideos = async (excludedProjects: WistiaItem[], bearerToken: s
     console.info('Succesfully fetched the Wistia projects.');
     const { data } = projectsResponse;
 
-    if( !data ) return {
+    if (!data) return {
       response: projectsResponse,
       videos: []
     };

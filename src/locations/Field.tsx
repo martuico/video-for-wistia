@@ -23,8 +23,8 @@ const Field = () => {
     (async () => {
       const videoRequest = await fetchVideos(parameters.excludedProjects, parameters.apiBearerToken) || [];
       console.log(videoRequest)
-      if(videoRequest.response.success) {
-        updateData(videoRequest.videos) || [];
+      if (videoRequest.response.success) {
+        updateData(videoRequest.videos || []);
       }
     })()
 
