@@ -45,6 +45,7 @@ const Field = () => {
       setIsLoading(false)
     })()
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sdk.field, sdk.parameters.installation])
 
 
