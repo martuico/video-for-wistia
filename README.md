@@ -1,5 +1,15 @@
 ## How to use
+### Add field in content type
+1. Select JSON Object
+![Screenshot](https://github.com/martuico/video-for-wistia/assets/2949921/efe62ad2-8340-490e-a9e3-2cc29a42988a)
+2. Click and Configure
+3. Go to Appearance tab from here you can select either single or multiple
+![Screenshot](https://github.com/martuico/video-for-wistia/assets/2949921/abe3d12a-1763-481a-a39f-439d42de9580)
+4. Happy Contentful!
+![Screenshot](https://github.com/martuico/video-for-wistia/assets/2949921/9cbf9124-77f7-4029-a12e-dbce8cbc3f62)
 
+
+## Installation
 ### `npm run create-app-definition`
 1. App Name: `contentful-app-name`
 2. Select App on where to render: `Important!` Make sure to select App Configuration and Entry Field:
