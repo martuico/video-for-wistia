@@ -61,6 +61,7 @@ const Field = () => {
       updateData(x)
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIds])
 
   const setSelecteData = (item: WistiaItem) => {
