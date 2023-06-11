@@ -24,7 +24,7 @@ const Field = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   sdk.window.startAutoResizer()
-  const isSingle = sdk.parameters?.instance?.selectYesForSingleVideo;
+  const isSingle = sdk.parameters?.instance?.selectYesForSingleVideo === 'yes';
 
   useEffect(() => {
     const fieldValues = sdk.field.getValue()
@@ -47,6 +47,31 @@ const Field = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sdk.field, sdk.parameters.installation])
+
+  useEffect(() => {
+    if (selectedIds) {
+      const x = data.map(item => {
+        if (selectedIds.includes(item.id)) {
+          item.isSelected = true
+        } else {
+          item.isSelected = false
+        }
+        return { ...item }
+      })
+      updateData(x)
+    }
+
+  }, [selectedIds])
+
+  const setSelecteData = (item: WistiaItem) => {
+    if (isSingle && selectedIds.length >= 1) {
+      setIds([item.id])
+    } else {
+      setIds([...selectedIds, item.id])
+    }
+    setNewValues()
+  }
+
 
 
   const setNewValues = () => {
@@ -111,7 +136,7 @@ const Field = () => {
     <FormControl.HelpText>
       Your list of selected video{isSingle ? '' : 's'}.
     </FormControl.HelpText>
-    {selectedIds && selectedIds.length > 0 &&
+    {!isLoading && selectedIds && selectedIds.length > 0 &&
 
       selectedIds.map((id) => {
         return <Pill
@@ -134,17 +159,17 @@ const Field = () => {
               src={item.thumbnail?.url}
               size="small"
               style={{ border: `${item.isSelected ? '2px solid purple' : 'none'}` }}
-              onClick={() => {
-                item.isSelected = true
-                if (isSingle && selectedIds.length >= 1) {
-                  setIds([item.id])
-                } else {
-                  setIds([...selectedIds, item.id])
+              onClick={(e) => {
+                e.preventDefault()
+                if(selectedIds.includes(item.id)){
+                  return 
                 }
-                setNewValues()
+                setSelecteData(item)
+                item.isSelected = true//selectedIds.indexOf(item.id) > -1
+
               }}
             />
-            <Paragraph>{item.name}</Paragraph>
+            <Paragraph>{item.name + ' isSeleclted' + item.isSelected}</Paragraph>
           </GridItem>
         ))}
       </Grid>
