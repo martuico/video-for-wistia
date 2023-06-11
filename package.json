@@ -52,5 +52,8 @@
     "esbuild": "^0.17.19",
     "typescript": "4.9.5"
   },
-  "homepage": "."
+  "homepage": ".",
+  "overrides": {
+    "nth-check": "2.1.1"
+  }
 }
