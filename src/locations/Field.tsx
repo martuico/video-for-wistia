@@ -36,9 +36,9 @@ const Field = () => {
     setIsLoading(true)
     const parameters: any = sdk.parameters.installation;
     (async () => {
-      const videoRequest = await fetchVideos(parameters.excludedProjects, parameters.apiBearerToken) || [];
+      const videoRequest: any = await fetchVideos(parameters.excludedProjects, parameters.apiBearerToken) || [];
       if (videoRequest.response.success) {
-        const videosR = videoRequest.videos.map((vid) => ({ ...vid, isSelected: selectedIds.includes(vid.id) }))
+        const videosR = videoRequest.videos.map((vid: WistiaItem) => ({ ...vid, isSelected: selectedIds.includes(vid.id) }))
         updateData(videosR || []);
         setOriginalData(videosR || []);
       }
@@ -50,7 +50,7 @@ const Field = () => {
 
   useEffect(() => {
     if (selectedIds) {
-      const x = data.map(item => {
+      const x = data.map((item: WistiaItem) => {
         if (selectedIds.includes(item.id)) {
           item.isSelected = true
         } else {
@@ -77,7 +77,7 @@ const Field = () => {
 
   const setNewValues = () => {
     const items = data && selectedIds.length > 0 ? data
-      .filter(item =>
+      .filter((item: WistiaItem) =>
         selectedIds.findIndex((updatedId: number) => item.id === updatedId) !== -1
       )
       .map(item => {
@@ -112,7 +112,7 @@ const Field = () => {
       return
     }
 
-    const filteredData = data.filter(item => {
+    const filteredData = data.filter((item: WistiaItem) => {
       return (item.name && item.name.indexOf(search) > -1)
     });
     setSearchData(filteredData);
@@ -162,12 +162,11 @@ const Field = () => {
               style={{ border: `${item.isSelected ? '2px solid purple' : 'none'}` }}
               onClick={(e) => {
                 e.preventDefault()
-                if(selectedIds.includes(item.id)){
-                  return 
+                if (selectedIds.includes(item.id)) {
+                  return
                 }
                 setSelecteData(item)
-                item.isSelected = true//selectedIds.indexOf(item.id) > -1
-
+                item.isSelected = true
               }}
             />
             <Paragraph>{item.name + ' isSeleclted' + item.isSelected}</Paragraph>
