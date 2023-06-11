@@ -24,7 +24,7 @@ const Field = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   sdk.window.startAutoResizer()
-  const isSingle = sdk.parameters?.instance?.selectYesForSingleVideo === 'yes';
+  const isSingle = sdk.parameters?.instance?.selectYesForSingleVideo;
 
   useEffect(() => {
     const fieldValues = sdk.field.getValue()
