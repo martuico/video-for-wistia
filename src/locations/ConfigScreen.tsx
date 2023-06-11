@@ -15,10 +15,10 @@ export interface AppInstallationParameters {
 
 const ConfigScreen = () => {
   const [parameters, setParameters] = useState<AppInstallationParameters>({
-    //apiBearerToken: 'b5cfe07934edda82eda65b24e2e43854661f97ccea572bf48a732b5345f9dd36',
     apiBearerToken: '',
-    excludedProjects: [],
+    excludedProjects: []
   });
+
   const sdk = useSDK<ConfigAppSDK>();
   const [projects, loading] = useWistia(parameters.apiBearerToken);
   const [excludedProjects, setExcludedProjects] = useState<string[]>([]);
@@ -64,7 +64,7 @@ const ConfigScreen = () => {
       } else {
         setParameters({
           apiBearerToken: '',
-          excludedProjects: [],
+          excludedProjects: []
         });
       }
       // Once preparation has finished, call `setReady` to hide

@@ -7,6 +7,7 @@ export interface WistiaItem {
   thumbnail?: {
     url: string;
   }
+  isSelected?: boolean;
 }
 
 export interface WistiaResponseInterface {

@@ -1,0 +1,22 @@
+{
+  "id": "video-for-wistia",
+  "name": "video-for-wistia",
+  "srcdoc": "./build/index.html",
+  "fieldTypes": ["Object"],
+  "parameters": {
+    "instance": [
+      {
+        "id": "selectYesForSingleVideo",
+        "type": "Boolean",
+        "name": "Select Yes for Single Video",
+        "description": "If you want to select only one video select 'Yes'",
+        "default": true,
+        "labels": {
+          "true": "Yes",
+          "false": "No"
+        }
+      }
+    ],
+    "installation": []
+  }
+}
