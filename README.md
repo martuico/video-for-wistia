@@ -1,23 +1,23 @@
-This project was bootstrapped with [Create Contentful App](https://github.com/contentful/create-contentful-app).
-
 ## How to use
 
-Execute create-contentful-app with npm, npx or yarn to bootstrap the example:
+### `npm run create-app-definition`
+1. App Name: `contentful-app-name`
+2. Select App on where to render: `Important!` Make sure to select App Configuration and Entry Field:
+![Screenshot](https://github.com/martuico/video-for-wistia/assets/2949921/dda94d14-457f-4467-a6b9-46b6fdc86d45)
+3. Choose Type of Field: Arrow down and select `JSON Object`
+![Screenshot](https://github.com/martuico/video-for-wistia/assets/2949921/a02629a9-0fa8-43e3-b7f2-ad6062a27d8c)
 
-```bash
-# npx
-npx create-contentful-app --typescript
-
-# npm
-npm init contentful-app -- --typescript
-
-# Yarn
-yarn create contentful-app --typescript
-```
-
-## Available Scripts
-
-In the project directory, you can run:
+### App definition added Successfully!
+Now we need to update our instance parameter to have select if Multiple or Single:
+1. Go to custom Apps
+2. Select Edit Definition
+3. Go to Instance parameter definition
+    ![Screenshot 202](https://github.com/martuico/video-for-wistia/assets/2949921/6e78ccb7-8628-4755-8bc6-cc5a45344bf2) 
+    - Add instance parameter 
+    ![Screenshot](https://github.com/martuico/video-for-wistia/assets/2949921/d90dc502-2c16-4e35-ad31-91ad14ecff61) 
+    - #### `Important!` to use this as Display name `Select yes for single video`
+    - Choose type boolean and leave as is
+    - Click Save
 
 #### `npm start`
 
@@ -41,6 +41,7 @@ Uploads the build folder to contentful and creates a bundle that is automaticall
 The command guides you through the deployment process and asks for all required arguments.
 Read [here](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/#deploy-with-contentful) for more information about the deployment process.
 
+
 #### `npm run upload-ci`
 
 Similar to `npm run upload` it will upload your app to contentful and activate it. The only difference is  
@@ -53,29 +54,3 @@ For this command to work, the following environment variables must be set:
 - `CONTENTFUL_APP_DEF_ID` - The ID of the app to which to add the bundle
 - `CONTENTFUL_ACCESS_TOKEN` - A personal [access token](https://www.contentful.com/developers/docs/references/content-management-api/#/reference/personal-access-tokens)
 
-## Libraries to use
-
-To make your app look and feel like Contentful use the following libraries:
-
-- [Forma 36](https://f36.contentful.com/) – Contentful's design system
-- [Contentful Field Editors](https://www.contentful.com/developers/docs/extensibility/field-editors/) – Contentful's field editor React components
-
-## Using the `contentful-management` SDK
-
-In the default create contentful app output, a contentful management client is
-passed into each location. This can be used to interact with Contentful's
-management API. For example
-
-```js
-// Use the client
-cma.locale.getMany({}).then((locales) => console.log(locales));
-```
-
-Visit the [`contentful-management` documentation](https://www.contentful.com/developers/docs/extensibility/app-framework/sdk/#using-the-contentful-management-library)
-to find out more.
-
-## Learn More
-
-[Read more](https://www.contentful.com/developers/docs/extensibility/app-framework/create-contentful-app/) and check out the video on how to use the CLI.
-
-Create Contentful App uses [Create React App](https://create-react-app.dev/). You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started) and how to further customize your app.
