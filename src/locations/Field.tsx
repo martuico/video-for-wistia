@@ -58,24 +58,24 @@ const Field = () => {
         return { ...item }
       })
       updateData(x)
+      setNewValues()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedIds])
 
   const setSelecteData = (item: WistiaItem) => {
-    if (isSingle && selectedIds.length >= 1) {
+    if (isSingle) {
       setIds([item.id])
     } else {
       setIds([...selectedIds, item.id])
     }
-    setNewValues()
   }
 
 
 
   const setNewValues = () => {
-    const items = data && selectedIds.length > 0 ? data
+    const items = data
       .filter((item: WistiaItem) =>
         selectedIds.findIndex((updatedId: number) => item.id === updatedId) !== -1
       )
@@ -87,7 +87,7 @@ const Field = () => {
           thumbnail: item.thumbnail
         }
         return values;
-      }) : []
+      })
 
     sdk.field.setValue({ items })
   }
@@ -170,7 +170,7 @@ const Field = () => {
                       item.isSelected = true
                     }}
                   />
-                  <Paragraph>{item.name}</Paragraph>
+                  <Paragraph>{item.id + '-' + item.name}</Paragraph>
                 </GridItem>
               ))}
             </Grid>
