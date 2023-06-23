@@ -22,17 +22,8 @@ const ConfigScreen = () => {
   const sdk = useSDK<ConfigAppSDK>();
   const [projects, loading] = useWistia(parameters.apiBearerToken);
   const [excludedProjects, setExcludedProjects] = useState<string[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    const timeOutId = setTimeout(() => {
-      setParameters({
-        ...parameters,
-        excludedProjects: projects.filter(project => excludedProjects.includes(project.hashedId)),
-      })
-    }, 100);
-    return () => clearTimeout(timeOutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [excludedProjects])
 
   /*
      To use the cma, inject it as follows.
@@ -57,24 +48,32 @@ const ConfigScreen = () => {
     (async () => {
       // Get current parameters of the app.
       // If the app is not installed yet, `parameters` will be `null`.
+      setParameters({
+        apiBearerToken: '',
+        excludedProjects: []
+      });
       const currentParameters: AppInstallationParameters | null = await sdk.app.getParameters();
-      if (currentParameters && currentParameters.apiBearerToken && currentParameters.excludedProjects.length > 0) {
+      if (currentParameters && currentParameters.apiBearerToken) {
         setParameters(currentParameters);
         setExcludedProjects(currentParameters.excludedProjects.map((item) => item.hashedId));
-      } else {
-        setParameters({
-          apiBearerToken: '',
-          excludedProjects: []
-        });
       }
+      setIsMounted(true);
       // Once preparation has finished, call `setReady` to hide
       // the loading screen and present the app to a user.
       sdk.app.setReady();
     })();
   }, [sdk]);
 
+  useEffect(() => {
+    if (!isMounted) return;
+    setParameters({
+      apiBearerToken: parameters.apiBearerToken,
+      excludedProjects: projects.filter(project => excludedProjects.includes(project.hashedId)),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [excludedProjects])
 
-  return (
+  return (isMounted &&
     <Flex flexDirection="column" className={css({ margin: '80px', maxWidth: '800px' })}>
       <Form>
         <Heading className={css({ marginBottom: '0px' })}>Wistia Videos App Configuration</Heading>
@@ -120,8 +119,12 @@ const ConfigScreen = () => {
                 value={projects.hashedId}
                 isChecked={excludedProjects.includes(projects.hashedId)}
                 onChange={(e) => {
-                  !e.target.checked ? setExcludedProjects(excludedProjects.filter(project => project !== projects.hashedId)) :
+                  if (!e.target.checked) {
+                    setExcludedProjects(excludedProjects.filter(project => project !== projects.hashedId))
+                  } else {
                     setExcludedProjects(excludedProjects.concat(projects.hashedId));
+                  }
+                  console.log('checked')
                 }}
               >
                 {projects.name}
@@ -130,7 +133,7 @@ const ConfigScreen = () => {
           })}
         </FormControl>
       </Form>
-    </Flex>
+    </Flex >
   );
 };
 

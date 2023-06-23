@@ -28,10 +28,8 @@ const Field = () => {
 
   useEffect(() => {
     const fieldValues = sdk.field.getValue()
-    setIds(
-      fieldValues !== undefined && fieldValues.items && fieldValues.items.length > 0 ?
-        fieldValues.items.map((item: WistiaItem) => item.id) : []
-    );
+    const selectedIdsItems = fieldValues && fieldValues.items ?
+      fieldValues.items.map((item: WistiaItem) => item.id) : []
 
     setIsLoading(true)
     const parameters: any = sdk.parameters.installation;
@@ -42,6 +40,7 @@ const Field = () => {
         updateData(videosR || []);
         setOriginalData(videosR || []);
       }
+      setIds(selectedIdsItems);
       setIsLoading(false)
     })()
 
@@ -119,67 +118,77 @@ const Field = () => {
     updateData(filteredData);
   }
 
-  return <FormControl>
-    <FormControl.Label>Search for videos</FormControl.Label>
-    <TextInput
-      value={search}
-      onChange={(event) => {
-        setSearch(event.target.value);
-        updateDataBySearch(event.target.value);
-      }} />
-    {search && (
+  return (
+    data ?
       <>
-        <Paragraph>{searchData.length} results found</Paragraph>
+        <FormControl>
+          <FormControl.Label>Search for videos</FormControl.Label>
+          <TextInput
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              updateDataBySearch(event.target.value);
+            }} />
+          {search && (
+            <>
+              <Paragraph>{searchData.length} results found</Paragraph>
+            </>
+          )}
+
+          <Heading>{isSingle ? ' Select a video' : 'Select videos'}</Heading>
+          <FormControl.HelpText>
+            Your list of selected video{isSingle ? '' : 's'}.
+          </FormControl.HelpText>
+          {!isLoading && selectedIds && selectedIds.length > 0 &&
+            selectedIds.map((id) => {
+              return <Pill
+                key={id}
+                className={style.pill}
+                testId={id.toString()}
+                label={originalData.find((item) => item.id === id)?.name || ''}
+                onClose={() => removeSelected(id)}
+                onDrag={() => { }}
+              />
+            })
+          }
+          {!isLoading ?
+            <Grid style={{ width: 'fit-content', maxHeight: '350px', overflowY: 'scroll' }} columns="1fr 1fr 1fr 1fr" rowGap="spacingM" columnGap="spacingM">
+              {data && data.map((item: WistiaItem) => (
+                <GridItem key={item.id}>
+                  <AssetCard
+                    type="image"
+                    title={item.name}
+                    src={item.thumbnail?.url}
+                    size="small"
+                    style={{ border: `${item.isSelected ? '2px solid purple' : 'none'}` }}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      if (selectedIds.includes(item.id)) {
+                        return
+                      }
+                      setSelecteData(item)
+                      item.isSelected = true
+                    }}
+                  />
+                  <Paragraph>{item.name}</Paragraph>
+                </GridItem>
+              ))}
+            </Grid>
+            :
+            <Skeleton.Container>
+              <Skeleton.BodyText numberOfLines={4} />
+            </Skeleton.Container>
+          }
+
+        </FormControl >
+      </> :
+      <>
+        <Paragraph>No videos found</Paragraph>
+        <Skeleton.Container>
+          <Skeleton.BodyText numberOfLines={4} />
+        </Skeleton.Container>
       </>
-    )}
-
-    <Heading>{isSingle ? ' Select a video' : 'Select videos'}</Heading>
-    <FormControl.HelpText>
-      Your list of selected video{isSingle ? '' : 's'}.
-    </FormControl.HelpText>
-    {!isLoading && selectedIds && selectedIds.length > 0 &&
-
-      selectedIds.map((id) => {
-        return <Pill
-          key={id}
-          className={style.pill}
-          testId={id.toString()}
-          label={originalData.find((item) => item.id === id)?.name || ''}
-          onClose={() => removeSelected(id)}
-          onDrag={() => { }}
-        />
-      })
-    }
-    {!isLoading ?
-      <Grid style={{ width: 'fit-content', maxHeight: '350px', overflowY: 'scroll' }} columns="1fr 1fr 1fr 1fr" rowGap="spacingM" columnGap="spacingM">
-        {data && data.map((item: WistiaItem) => (
-          <GridItem key={item.id}>
-            <AssetCard
-              type="image"
-              title={item.name}
-              src={item.thumbnail?.url}
-              size="small"
-              style={{ border: `${item.isSelected ? '2px solid purple' : 'none'}` }}
-              onClick={(e) => {
-                e.preventDefault()
-                if (selectedIds.includes(item.id)) {
-                  return
-                }
-                setSelecteData(item)
-                item.isSelected = true
-              }}
-            />
-            <Paragraph>{item.name + ' isSeleclted' + item.isSelected}</Paragraph>
-          </GridItem>
-        ))}
-      </Grid>
-      :
-      <Skeleton.Container>
-        <Skeleton.BodyText numberOfLines={4} />
-      </Skeleton.Container>
-    }
-
-  </FormControl >;
+  )
 };
 
 export default Field;
